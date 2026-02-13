@@ -1,0 +1,15 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Controllers as services (only in test env).
+    App\Tests\Fixtures\Controller\:
+        resource: '../tests/Fixtures/Controller/'
+        tags: ['controller.service_arguments']
+
+    App\Tests\Fixtures\Handler\:
+        resource: '../tests/Fixtures/Handler/'
+
+    App\Tests\Fixtures\Form\:
+        resource: '../tests/Fixtures/Form/'
