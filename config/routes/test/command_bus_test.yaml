@@ -22,3 +22,8 @@ command_bus_test_twig_invalid_form:
     path: /_test/twig/invalid-form
     controller: App\Tests\Fixtures\Controller\TestTwigInvalidFormController
     methods: [POST]
+
+command_bus_test_twig_valid_form:
+    path: /_test/twig/valid-form
+    controller: App\Tests\Fixtures\Controller\TestTwigValidFormController
+    methods: [POST]
