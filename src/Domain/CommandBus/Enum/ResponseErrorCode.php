@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Enum;
+namespace App\Domain\CommandBus\Enum;
 
 enum ResponseErrorCode: string
 {

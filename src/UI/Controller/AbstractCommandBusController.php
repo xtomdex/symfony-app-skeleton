@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\UI\Controller;
 
-use App\Domain\Contract\CommandBusExceptionMapperInterface;
+use App\Domain\CommandBus\Contract\CommandBusExceptionMapperInterface;
 use App\Infrastructure\Form\FormErrorNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\CommandBus\Trait;
 
-use App\Domain\Contract\CommandBusExceptionMapperInterface;
-use App\Domain\Contract\CommandInterface;
-use App\Domain\DTO\CommandBusError;
+use App\Domain\CommandBus\Contract\CommandBusExceptionMapperInterface;
+use App\Domain\CommandBus\Contract\CommandInterface;
+use App\Domain\CommandBus\DTO\CommandBusError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Contract;
+namespace App\Domain\CommandBus\Contract;
 
-use App\Domain\DTO\CommandBusError;
+use App\Domain\CommandBus\DTO\CommandBusError;
 
 interface CommandBusExceptionMapperInterface
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\DTO;
+namespace App\Domain\CommandBus\DTO;
 
 final readonly class RedirectPayload
 {

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\CommandBus;
 
-use App\Domain\Contract\CommandBusExceptionMapperInterface;
-use App\Domain\DTO\CommandBusError;
-use App\Domain\DTO\RedirectPayload;
-use App\Domain\Enum\ResponseErrorCode;
-use App\Domain\Exception\ForbiddenException;
-use App\Domain\Exception\NotFoundException;
-use App\Domain\Exception\RedirectException;
-use App\Domain\Exception\ValidationException;
+use App\Domain\CommandBus\Contract\CommandBusExceptionMapperInterface;
+use App\Domain\CommandBus\DTO\CommandBusError;
+use App\Domain\CommandBus\DTO\RedirectPayload;
+use App\Domain\CommandBus\Enum\ResponseErrorCode;
+use App\Domain\CommandBus\Exception\ForbiddenException;
+use App\Domain\CommandBus\Exception\NotFoundException;
+use App\Domain\CommandBus\Exception\RedirectException;
+use App\Domain\CommandBus\Exception\ValidationException;
 
 final class CommandBusExceptionMapper implements CommandBusExceptionMapperInterface
 {

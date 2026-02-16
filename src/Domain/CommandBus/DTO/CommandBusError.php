@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\DTO;
+namespace App\Domain\CommandBus\DTO;
 
-use App\Domain\Enum\ResponseErrorCode;
+use App\Domain\CommandBus\Enum\ResponseErrorCode;
 
 final readonly class CommandBusError
 {

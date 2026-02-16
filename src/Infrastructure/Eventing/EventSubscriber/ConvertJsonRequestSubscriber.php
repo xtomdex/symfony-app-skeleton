@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Infrastructure\EventSubscriber;
+namespace App\Infrastructure\Eventing\EventSubscriber;
 
-use App\Domain\Exception\ValidationException;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
-use function json_last_error;
+use App\Domain\CommandBus\Exception\ValidationException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use function json_last_error;
 
 class ConvertJsonRequestSubscriber implements EventSubscriberInterface
 {
