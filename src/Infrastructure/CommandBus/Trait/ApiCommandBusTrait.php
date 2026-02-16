@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\CommandBus\Trait;
 
-use App\Domain\Contract\CommandInterface;
-use App\Domain\DTO\ApiResponse;
-use App\Domain\DTO\CommandBusError;
-use App\Domain\Exception\ValidationException;
+use App\Domain\CommandBus\Contract\CommandInterface;
+use App\Domain\CommandBus\DTO\ApiResponse;
+use App\Domain\CommandBus\DTO\CommandBusError;
+use App\Domain\CommandBus\Exception\ValidationException;
 use App\Infrastructure\Form\FormErrorNormalizer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
