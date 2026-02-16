@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Fixtures\Controller;
+namespace App\Tests\Fixtures\Controller\CommandBus;
 
-use App\Domain\Contract\CommandInterface;
+use App\Domain\CommandBus\Contract\CommandInterface;
 use App\Infrastructure\CommandBus\Trait\ApiCommandBusTrait;
-use App\Tests\Fixtures\Command\TestCommand;
-use App\Tests\Fixtures\Handler\TestThrowableHandler;
+use App\Tests\Fixtures\DTO\TestCommand;
+use App\Tests\Fixtures\Service\CommandBus\Handler\TestThrowableHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

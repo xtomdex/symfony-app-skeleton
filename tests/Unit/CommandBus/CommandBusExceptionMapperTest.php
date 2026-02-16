@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit;
+namespace App\Tests\Unit\CommandBus;
 
-use App\Domain\DTO\CommandBusError;
-use App\Domain\Enum\ResponseErrorCode;
-use App\Domain\Exception\ValidationException;
+use App\Domain\CommandBus\DTO\CommandBusError;
+use App\Domain\CommandBus\Enum\ResponseErrorCode;
+use App\Domain\CommandBus\Exception\ValidationException;
 use App\Infrastructure\CommandBus\CommandBusExceptionMapper;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;

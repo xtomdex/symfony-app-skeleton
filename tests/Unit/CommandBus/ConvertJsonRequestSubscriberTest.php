@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit;
+namespace App\Tests\Unit\CommandBus;
 
-use App\Infrastructure\EventSubscriber\ConvertJsonRequestSubscriber;
+use App\Infrastructure\Eventing\EventSubscriber\ConvertJsonRequestSubscriber;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;

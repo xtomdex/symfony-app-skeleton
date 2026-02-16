@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Fixtures\Form;
+namespace App\Tests\Fixtures\Service\CommandBus\Form;
 
-use App\Tests\Fixtures\Command\TestCommand;
+use App\Tests\Fixtures\DTO\TestCommand;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;

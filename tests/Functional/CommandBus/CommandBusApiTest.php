@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Functional;
+namespace App\Tests\Functional\CommandBus;
 
-use App\Domain\Enum\ResponseErrorCode;
+use App\Domain\CommandBus\Enum\ResponseErrorCode;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class CommandBusApiTest extends WebTestCase

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit;
+namespace App\Tests\Unit\CommandBus;
 
-use App\Domain\DTO\ApiResponse;
-use App\Domain\Enum\ResponseErrorCode;
+use App\Domain\CommandBus\DTO\ApiResponse;
+use App\Domain\CommandBus\Enum\ResponseErrorCode;
 use PHPUnit\Framework\TestCase;
 
 final class ApiResponseEnvelopeTest extends TestCase

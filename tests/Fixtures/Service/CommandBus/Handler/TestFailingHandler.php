@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Fixtures\Handler;
+namespace App\Tests\Fixtures\Service\CommandBus\Handler;
 
-use App\Domain\Contract\CommandInterface;
+use App\Domain\CommandBus\Contract\CommandInterface;
 
 final class TestFailingHandler
 {

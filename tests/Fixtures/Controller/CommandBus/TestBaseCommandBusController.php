@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Fixtures\Controller;
+namespace App\Tests\Fixtures\Controller\CommandBus;
 
 use App\UI\Controller\AbstractCommandBusController;
 
