@@ -1,0 +1,25 @@
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    App\Infrastructure\:
+        resource: '../src/Infrastructure/*'
+
+    App\Modules\:
+        resource: '../src/Modules/'
+        exclude:
+            - '../src/Modules/*/{Entity,Event,Exception,DTO,ValueObject,Enum,Message,Notification}'
+
+    App\UI\:
+        resource: '../src/UI/'
+        exclude:
+            - '../src/UI/Twig/Templates/'
+
+    App\UI\Twig\Widget\:
+        resource: '../src/UI/Twig/Widget/'
+        tags: [ 'twig.extension' ]
+
+imports:
+    - { resource: services/ }
