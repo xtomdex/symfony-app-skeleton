@@ -8,32 +8,47 @@ use App\Domain\Eventing\Contract\AggregateRoot;
 use App\Domain\Eventing\Contract\DomainEventInterface;
 use App\Domain\Eventing\Contract\EventDispatcherInterface;
 use App\Domain\Eventing\Contract\FlusherInterface;
+use App\Infrastructure\Transaction\TransactionalRunnerInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
-final readonly class Flusher implements FlusherInterface
+final readonly class DoctrineFlusher implements FlusherInterface
 {
     public function __construct(
-        private EventDispatcherInterface $dispatcher
+        private EntityManagerInterface $em,
+        private EventDispatcherInterface $dispatcher,
+        private TransactionalRunnerInterface $runner,
     ) {}
 
     public function flush(AggregateRoot ...$roots): void
     {
-        // 1) TODO: persist/flush transaction here (Doctrine or any other persistence)
-        // - begin transaction
-        // - flush changes
-        // - commit
-        //
-        // Important rule for the future: dispatch events ONLY after successful commit.
-
-        // 2) Collect events from unique roots
         $events = $this->collectEventsFromRoots($roots);
 
-        // 3) Dispatch
-        $this->dispatcher->dispatch($events);
+        // If runner owns the transaction, we only enqueue events.
+        if ($this->runner->isActive()) {
+            $this->runner->enqueueEvents($events);
+            return;
+        }
+
+        // Otherwise, default behavior: transaction is owned here.
+        $conn = $this->em->getConnection();
+        $conn->beginTransaction();
+
+        try {
+            $this->em->flush();
+            $conn->commit();
+
+            $this->dispatcher->dispatch($events);
+        } catch (\Throwable $e) {
+            if ($conn->isTransactionActive()) {
+                $conn->rollBack();
+            }
+            throw $e;
+        }
     }
 
     /**
-     * @param AggregateRoot $roots
-     * @return AggregateRoot
+     * @param AggregateRoot[] $roots
+     * @return DomainEventInterface[]
      */
     private function collectEventsFromRoots(array $roots): array
     {
@@ -56,8 +71,8 @@ final readonly class Flusher implements FlusherInterface
     /**
      * Deduplicate by object identity.
      *
-     * @param AggregateRoot $roots
-     * @return AggregateRoot
+     * @param AggregateRoot[] $roots
+     * @return AggregateRoot[]
      */
     private function deduplicateRoots(array $roots): array
     {

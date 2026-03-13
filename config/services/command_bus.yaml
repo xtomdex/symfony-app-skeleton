@@ -1,0 +1,3 @@
+services:
+    App\Domain\CommandBus\Contract\CommandBusExceptionMapperInterface:
+        alias: App\Infrastructure\CommandBus\CommandBusExceptionMapper

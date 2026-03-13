@@ -1,0 +1,6 @@
+services:
+    App\Infrastructure\Logging\Handler\DoctrineDomainEventDbHandler:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+            $fallbackLogger: '@monolog.logger'
+            $enabled: '%env(bool:LOGGING_EVENT_LOG_DB_ENABLED)%'

@@ -4,10 +4,10 @@ services:
         autoconfigure: true
         public: true
 
+    App\Tests\Fixtures\:
+        resource: '../tests/Fixtures/'
+
     # Controllers as services (only in test env).
     App\Tests\Fixtures\Controller\:
         resource: '../tests/Fixtures/Controller/'
         tags: ['controller.service_arguments']
-
-    App\Tests\Fixtures\Service\:
-        resource: '../tests/Fixtures/Service/'

@@ -1,0 +1,16 @@
+services:
+    App\Domain\Eventing\Contract\EventDispatcherInterface:
+        alias: App\Infrastructure\Eventing\EventDispatcher
+
+    App\Domain\Eventing\Contract\FlusherInterface:
+        alias: App\Infrastructure\Eventing\DoctrineFlusher
+
+    App\Infrastructure\Transaction\TransactionalRunnerInterface:
+        alias: App\Infrastructure\Transaction\DoctrineTransactionalRunner
+
+    App\Infrastructure\Eventing\Decorator\LoggingEventDispatcher:
+        decorates: App\Domain\Eventing\Contract\EventDispatcherInterface
+        arguments:
+            $inner: '@App\Infrastructure\Eventing\Decorator\LoggingEventDispatcher.inner'
+            $payloadExtractor: '@App\Domain\Eventing\Contract\EventPayloadExtractorInterface'
+            $logger: '@monolog.logger.domain_event'
