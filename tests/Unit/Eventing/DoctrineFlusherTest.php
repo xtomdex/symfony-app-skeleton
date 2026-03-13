@@ -80,7 +80,6 @@ final class DoctrineFlusherTest extends TestCase
     public function test_flush_when_runner_active_flushes_and_enqueues_events_without_db_transaction_and_without_dispatch(): void
     {
         $em = $this->createMock(EntityManagerInterface::class);
-        $conn = $this->createMock(Connection::class);
         $dispatcher = $this->createMock(EventDispatcherInterface::class);
         $runner = $this->createMock(TransactionalRunnerInterface::class);
 
@@ -89,7 +88,7 @@ final class DoctrineFlusherTest extends TestCase
             ->willReturn(true);
 
         // When runner is active: no explicit DB transaction management here.
-        $em->expects(self::once())->method('flush');
+        $em->expects(self::never())->method('flush');
         $em->expects(self::never())->method('getConnection'); // optional: ensures we don't touch DBAL tx
 
         $runner->expects(self::once())
