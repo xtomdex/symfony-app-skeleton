@@ -6,5 +6,4 @@ namespace App\Domain\Eventing\Contract;
 
 interface DomainEventInterface
 {
-    public function getId(): string;
 }

@@ -22,7 +22,6 @@ This document describes architectural rules, not implementation details.
 The `src/Domain` layer MUST NOT depend on:
 
 - Symfony
-- Doctrine
 - Twig
 - Messenger
 - Any external framework
@@ -34,6 +33,8 @@ Domain contains only:
 - Domain Exceptions
 - Pure DTOs (e.g. ApiResponse)
 - Value objects
+
+Domain CAN depend on `Doctrine`. It is an only exception.
 
 Domain must remain framework-agnostic.
 
@@ -131,7 +132,62 @@ Minimum required error codes:
 
 ---
 
-# 3. Testing Policy
+# 3. Layer Dependencies
+
+## 3.1 Allowed Dependency Direction
+
+    Domain ← Infrastructure
+    Domain ← Modules
+    Modules ← Infrastructure
+
+Infrastructure depends on Modules and Domain.
+
+Modules depend on Domain.
+
+Domain depends on nothing.
+
+Modules MUST NOT depend on Infrastructure.
+
+## 3.2 Module Dependencies
+
+Modules may depend on other modules.
+
+Dependency must be unidirectional (no circular references).
+
+Cross-module communication for decoupled scenarios uses Common Events (see eventing.md).
+
+---
+
+# 4. Entity Design
+
+## 4.1 Closed Constructors
+
+Entity constructors MUST be `protected`.
+
+Entity instances are created through semantic static factory methods.
+
+    User::create(...)
+    User::signUp(...)
+    User::invite(...)
+
+## 4.2 Skeleton Extensibility (BaseEntity Pattern)
+
+When an entity is provided by the skeleton and expected to be extended by projects:
+
+- Skeleton defines a `MappedSuperclass` base class with stable fields (e.g. `BaseUser`)
+- Project defines the concrete `Entity` class extending the base (e.g. `User`)
+- Base class lives in the same module as the concrete class
+- Factory method in base class uses `new static()` and returns `static`
+
+Skeleton owns the base class. Project owns the concrete class.
+
+After initial creation, the skeleton MUST NOT modify the concrete class.
+
+This eliminates merge conflicts when pulling skeleton updates into projects.
+
+---
+
+# 5. Testing Policy
 
 Unit tests must cover:
 
@@ -152,7 +208,7 @@ Test-only artifacts must not load in dev/prod environments.
 
 ---
 
-# 4. Extension Principles
+# 6. Extension Principles
 
 When adding new subsystems (JWT, RBAC, Versioning, OpenAPI):
 
