@@ -12,5 +12,4 @@ services:
         decorates: App\Domain\Eventing\Contract\EventDispatcherInterface
         arguments:
             $inner: '@App\Infrastructure\Eventing\Decorator\LoggingEventDispatcher.inner'
-            $payloadExtractor: '@App\Domain\Eventing\Contract\EventPayloadExtractorInterface'
             $logger: '@monolog.logger.domain_event'
