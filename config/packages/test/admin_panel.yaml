@@ -1,0 +1,19 @@
+# This file goes in: config/packages/test/admin_panel.yaml
+# It activates AdminPanel services ONLY in the test environment.
+# Skeleton does not load AdminPanel in dev/prod.
+
+imports:
+    - { resource: '../../../src/Modules/AdminPanel/Resources/config/services.yaml' }
+    - { resource: '../../../src/Modules/AdminPanel/Resources/config/twig.yaml' }
+
+twig:
+    paths:
+        '%kernel.project_dir%/src/Modules/AdminPanel/Tests/Functional/Fixtures/templates': admin_panel_test
+
+services:
+    # Register test fixtures as panels
+    App\Modules\AdminPanel\Tests\Functional\Fixtures\MainTestPanel:
+        tags: ['admin.panel']
+
+    App\Modules\AdminPanel\Tests\Functional\Fixtures\PartnerTestPanel:
+        tags: ['admin.panel']

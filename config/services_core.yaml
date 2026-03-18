@@ -10,6 +10,7 @@ services:
     App\Modules\:
         resource: '../src/Modules/'
         exclude:
+            - '../src/Modules/AdminPanel'
             - '../src/Modules/*/{Entity,Event,Exception,DTO,ValueObject,Enum,Message,Notification}'
 
     App\UI\:

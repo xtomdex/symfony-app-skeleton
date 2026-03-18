@@ -1,0 +1,14 @@
+{% set brand = admin_brand() %}
+{% set menuItems = admin_sidebar_menu() %}
+
+<aside id="layout-menu" class="layout-menu menu-vertical menu">
+    {% include '@admin_panel/layout/_brand.html.twig' with { brand: brand } only %}
+
+    <div class="menu-inner-shadow"></div>
+
+    <ul class="menu-inner py-1">
+        {% for item in menuItems %}
+            {% include '@admin_panel/layout/_sidebar_menu_item.html.twig' with { item: item } only %}
+        {% endfor %}
+    </ul>
+</aside>

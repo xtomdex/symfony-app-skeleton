@@ -1,0 +1,35 @@
+{% if item.section %}
+    <li class="menu-header small">
+        <span class="menu-header-text">{{ item.label|trans }}</span>
+    </li>
+{% else %}
+    {% set hasChildren = item.children is defined and item.children|length > 0 %}
+
+    {% set liClasses = ['menu-item'] %}
+    {% if item.active %}{% set liClasses = liClasses|merge(['active']) %}{% endif %}
+    {% if hasChildren and item.open %}{% set liClasses = liClasses|merge(['open']) %}{% endif %}
+
+    <li class="{{ liClasses|join(' ') }}">
+        {% if hasChildren %}
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                {% if item.icon %}
+                    <i class="menu-icon icon-base ti {{ item.icon }}"></i>
+                {% endif %}
+                <div>{{ item.label|trans }}</div>
+            </a>
+
+            <ul class="menu-sub">
+                {% for child in item.children %}
+                    {% include '@admin_panel/layout/_sidebar_menu_item.html.twig' with { item: child } only %}
+                {% endfor %}
+            </ul>
+        {% else %}
+            <a href="{{ item.link ?: 'javascript:void(0);' }}" class="menu-link">
+                {% if item.icon %}
+                    <i class="menu-icon icon-base ti {{ item.icon }}"></i>
+                {% endif %}
+                <div>{{ item.label|trans }}</div>
+            </a>
+        {% endif %}
+    </li>
+{% endif %}

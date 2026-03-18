@@ -1,0 +1,59 @@
+<li class="nav-item navbar-dropdown dropdown-user dropdown">
+    <a
+        class="nav-link dropdown-toggle hide-arrow p-0"
+        href="javascript:void(0);"
+        data-bs-toggle="dropdown">
+        <div class="avatar avatar-online">
+            {% if user.avatarUrl %}
+                <img src="{{ user.avatarUrl }}" alt="{{ user.displayName }}" class="rounded-circle" />
+            {% else %}
+                <span class="avatar-initial rounded-circle bg-label-primary">
+                    {{ user.displayName|first|upper }}
+                </span>
+            {% endif %}
+        </div>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+            <a class="dropdown-item mt-0" href="{{ user.profileUrl }}">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 me-2">
+                        <div class="avatar avatar-online">
+                            {% if user.avatarUrl %}
+                                <img src="{{ user.avatarUrl }}" alt="{{ user.displayName }}" class="rounded-circle" />
+                            {% else %}
+                                <span class="avatar-initial rounded-circle bg-label-primary">
+                                    {{ user.displayName|first|upper }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="mb-0">{{ user.displayName }}</h6>
+                        <small class="text-body-secondary">{{ user.role }}</small>
+                    </div>
+                </div>
+            </a>
+        </li>
+        <li>
+            <div class="dropdown-divider my-1 mx-n2"></div>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{{ user.profileUrl }}">
+                <i class="icon-base ti tabler-user me-3 icon-md"></i>
+                <span class="align-middle">{{ 'admin.nav.profile'|trans }}</span>
+            </a>
+        </li>
+        <li>
+            <div class="dropdown-divider my-1 mx-n2"></div>
+        </li>
+        <li>
+            <div class="d-grid px-2 pt-2 pb-1">
+                <a class="btn btn-sm btn-danger d-flex" href="{{ user.logoutUrl }}">
+                    <small class="align-middle">{{ 'admin.nav.logout'|trans }}</small>
+                    <i class="icon-base ti tabler-logout ms-2 icon-14px"></i>
+                </a>
+            </div>
+        </li>
+    </ul>
+</li>

@@ -1,0 +1,17 @@
+<ul class="nav nav-tabs mb-4">
+    {% for tab in tabs %}
+        <li class="nav-item">
+            <a
+                class="nav-link {{ tab.active|default(false) ? 'active' }}"
+                href="{{ tab.url }}"
+                {% if tab.active|default(false) %}aria-current="page"{% endif %}>
+                {% if tab.icon is defined and tab.icon %}
+                    <i class="icon-base ti {{ tab.icon }} me-1"></i>
+                {% endif %}
+                {{ tab.label }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+
+{% block content %}{% endblock %}

@@ -1,0 +1,9 @@
+twig:
+    paths:
+        '%kernel.project_dir%/src/Modules/AdminPanel/Resources/views': admin_panel
+
+twig_component:
+    defaults:
+        App\Modules\AdminPanel\Twig\Component\:
+            template_directory: '@admin_panel/components'
+            name_prefix: 'Admin'

@@ -1,0 +1,16 @@
+<div class="app-brand">
+    <a href="javascript:void(0);" class="app-brand-link">
+        <span class="app-brand-logo">
+            <span class="text-primary">
+                <img src="{{ asset(brand.logoLight) }}" alt="{{ brand.name }}" class="app-brand-img">
+                <img src="{{ asset(brand.logoLight) }}" alt="{{ brand.name }}" class="app-brand-img-collapsed">
+            </span>
+        </span>
+        <span class="app-brand-text menu-text fw-bold ms-3">{{ brand.name }}</span>
+    </a>
+
+    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+        <i class="icon-base ti menu-toggle-icon d-none d-xl-block"></i>
+        <i class="icon-base ti tabler-x d-block d-xl-none"></i>
+    </a>
+</div>
