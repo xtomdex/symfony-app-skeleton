@@ -21,6 +21,11 @@
         <testsuite name="Application Test Suite">
             <directory>tests</directory>
         </testsuite>
+
+        <!-- AdminPanel -->
+        <testsuite name="admin-panel">
+            <directory>src/Modules/AdminPanel/Tests</directory>
+        </testsuite>
     </testsuites>
 
     <source ignoreSuppressionOfDeprecations="true"
