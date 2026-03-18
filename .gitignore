@@ -1,5 +1,6 @@
 ###> IDE ###
 .idea
+/config/reference.php
 ###< IDE ###
 
 ###> symfony/framework-bundle ###
