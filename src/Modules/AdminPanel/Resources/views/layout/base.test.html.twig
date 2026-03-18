@@ -1,0 +1,45 @@
+<!doctype html>
+<html
+    lang="{{ app.request.locale|default('en') }}"
+    class="layout-navbar-fixed layout-menu-fixed layout-compact"
+    dir="ltr"
+    data-skin="default"
+    data-bs-theme="light"
+    data-template="vertical-menu-template-no-customizer">
+    <head>
+        <meta charset="utf-8" />
+        <title>{% block title %}Admin Test{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        {% block head %}{% endblock %}
+    </head>
+
+    <body>
+        <div class="layout-wrapper layout-content-navbar">
+            <div class="layout-container">
+
+                {% block sidebar %}
+                    {% include '@admin_panel/layout/_sidebar.html.twig' %}
+                {% endblock %}
+
+                <div class="layout-page">
+
+                    {% block navbar %}
+                        {% include '@admin_panel/layout/_navbar.html.twig' %}
+                    {% endblock %}
+
+                    <div class="content-wrapper">
+                        <div class="container-xxl flex-grow-1 container-p-y">
+                            {% block body %}{% endblock %}
+                        </div>
+
+                        {% block footer %}
+                            {% include '@admin_panel/layout/_footer.html.twig' %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

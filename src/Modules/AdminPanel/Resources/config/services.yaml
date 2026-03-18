@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    _instanceof:
+        App\Modules\AdminPanel\Contract\AdminPanelInterface:
+            tags: ['admin.panel']
+
+    App\Modules\AdminPanel\:
+        resource: '../../*'
+        exclude:
+            - '../../Resources/'
+            - '../../Tests/'
+
+    App\Modules\AdminPanel\AdminPanelRegistry:
+        arguments:
+            $panels: !tagged_iterator admin.panel

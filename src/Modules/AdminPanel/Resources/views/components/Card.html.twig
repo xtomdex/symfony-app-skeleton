@@ -1,0 +1,27 @@
+<div class="card">
+    {% if title or subtitle %}
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <div>
+                {% if title %}
+                    <h5 class="card-title mb-0">{{ title }}</h5>
+                {% endif %}
+                {% if subtitle %}
+                    <small class="text-body-secondary">{{ subtitle }}</small>
+                {% endif %}
+            </div>
+            <div class="d-flex gap-2">
+                {% block actions %}{% endblock %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="card-body">
+        {% block content %}{% endblock %}
+    </div>
+
+    {% if block('footer') is defined and block('footer') is not empty %}
+        <div class="card-footer">
+            {% block footer %}{% endblock %}
+        </div>
+    {% endif %}
+</div>

@@ -1,0 +1,76 @@
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                {% for col in columns %}
+                    <th>
+                        {% if col.sortable|default(false) and sort is not null %}
+                            {% set isSorted = sort.key == col.key %}
+                            {% set nextDir = isSorted and sort.direction == 'asc' ? 'desc' : 'asc' %}
+                            <a href="?sort={{ col.key }}&direction={{ nextDir }}" class="text-body d-inline-flex align-items-center gap-1 text-decoration-none">
+                                {{ col.label }}
+                                {% if isSorted %}
+                                    <i class="icon-base ti {{ sort.direction == 'asc' ? 'tabler-chevron-up' : 'tabler-chevron-down' }} icon-xs"></i>
+                                {% else %}
+                                    <i class="icon-base ti tabler-arrows-sort icon-xs text-body-secondary"></i>
+                                {% endif %}
+                            </a>
+                        {% elseif col.sortable|default(false) %}
+                            <a href="?sort={{ col.key }}&direction=asc" class="text-body d-inline-flex align-items-center gap-1 text-decoration-none">
+                                {{ col.label }}
+                                <i class="icon-base ti tabler-arrows-sort icon-xs text-body-secondary"></i>
+                            </a>
+                        {% else %}
+                            {{ col.label }}
+                        {% endif %}
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr>
+                    {% for col in columns %}
+                        <td>{{ attribute(item, col.key)|default('') }}</td>
+                    {% endfor %}
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="{{ columns|length }}" class="text-center text-body-secondary py-4">
+                        {{ 'admin.table.empty'|trans }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if pagination and pagination.pages > 1 %}
+    <div class="d-flex justify-content-between align-items-center px-3 pb-3">
+        <small class="text-body-secondary">
+            {{ 'admin.table.total'|trans({'%count%': pagination.total}) }}
+        </small>
+
+        <nav aria-label="Table navigation">
+            <ul class="pagination pagination-sm mb-0">
+                <li class="page-item {{ pagination.page <= 1 ? 'disabled' }}">
+                    <a class="page-link" href="?page={{ pagination.page - 1 }}">
+                        <i class="icon-base ti tabler-chevron-left icon-xs"></i>
+                    </a>
+                </li>
+
+                {% for p in range(1, pagination.pages) %}
+                    <li class="page-item {{ p == pagination.page ? 'active' }}">
+                        <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+                    </li>
+                {% endfor %}
+
+                <li class="page-item {{ pagination.page >= pagination.pages ? 'disabled' }}">
+                    <a class="page-link" href="?page={{ pagination.page + 1 }}">
+                        <i class="icon-base ti tabler-chevron-right icon-xs"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+{% endif %}
