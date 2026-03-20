@@ -153,6 +153,8 @@ interface AdminPanelInterface
     public function userView(): ?AdminUserView;
 
     public function footer(): FooterConfig;
+
+    public function homePath(): string;
 }
 ```
 
@@ -167,6 +169,8 @@ interface AdminPanelInterface
 `userView()` — current user data for navbar dropdown. Returns `null` when unauthenticated.
 
 `footer()` — footer content.
+
+`homePath()` — absolute URL path for the panel's home page (e.g. `'/admin'`, `'/partner/dashboard'`). Used as the breadcrumb root link.
 
 ## 3.2 Panel Registration
 
@@ -219,13 +223,36 @@ Usage: `<twig:Admin:Card>`, `<twig:Admin:Page>`, `<twig:Admin:DataTable>`, `<twi
 
 Priority components (first implementation phase):
 
-**Page** — page wrapper. Props: `title`, `breadcrumbs`. Slots: `actions`, default content.
+**Page** — page wrapper. Delegates breadcrumb rendering to a nested `<twig:Admin:Breadcrumbs>`. Props: `title`, `breadcrumbs` (list of `Breadcrumb`), `showHome` (bool, default `true`). Slots: `actions`, default content.
 
-**Card** — content card. Props: `title`, `subtitle`. Slots: `actions`, default content (body), `footer`.
+**Breadcrumbs** — standalone breadcrumb trail. Props: `items` (list of `Breadcrumb`), `showHome` (bool, default `true`). When `showHome=true`, prepends a home icon breadcrumb using the active panel's `homePath()`. When `items` is empty and `showHome=true`, appends a `...` placeholder after the home icon.
+
+**Card** — content card. Props: `title`, `subtitle`, `icon` (?string, default `null` — optional Iconify icon rendered before the title). Slots: `actions`, default content (body), `footer`.
 
 **DataTable** — pure presentation table. Props: `columns`, `items`, `sort`, `pagination`. No DTO contract — receives raw arrays/objects, renders HTML.
 
 **NavTabs** — navigation sub-tabs. Renders a row of links as second/third-level navigation. Props: `tabs` (list of `{label, url, active?, icon?}`). Not Bootstrap JS tabs — each link navigates to a separate route.
+
+### Breadcrumb DTO
+
+`Breadcrumb` is a `final readonly` DTO used by the Page and Breadcrumbs components:
+
+```php
+final readonly class Breadcrumb
+{
+    public function __construct(
+        public string $label,
+        public ?string $url = null,
+        public ?string $icon = null,
+    ) {}
+}
+```
+
+`label` — display text. May be empty when `icon` is used instead (e.g. the home breadcrumb).
+
+`url` — link target. `null` for the last (current) breadcrumb, which renders as plain text.
+
+`icon` — optional Iconify icon identifier rendered in place of or alongside the label.
 
 ## 4.3 DataTable Design
 
@@ -456,10 +483,12 @@ Must cover:
 - `MenuItem` — factory methods, immutability, fluent API, clone behavior
 - `PreparedMenuItem` — section factory, hasChildren
 - `BrandConfig`, `FooterConfig`, `AdminUserView` — creation, field access
+- `Breadcrumb` — construction, field defaults (`url` and `icon` nullable)
 - `AdminMenuBuilder` — build with nesting, active/open resolution, empty children filtering
 - `AdminPanelRegistry` — resolveByRequest, get by name, missing panel exception
 - `ResolveAdminPanelListener` — attribute set on match, skipped on sub-request, null on no match
 - `AdminUiTwigExtension` — function registration, exception when no panel in request
+- `Breadcrumbs` component — `getResolvedItems()` prepends home breadcrumb, appends placeholder when items empty, falls back to `/` when no panel in request
 
 ## 7.4 Functional Tests
 
@@ -468,7 +497,7 @@ Must cover:
 - Sidebar renders menu items from test panel
 - Navbar renders user dropdown when user is present
 - Navbar handles null user (unauthenticated)
-- Each component (Page, Card, DataTable, NavTabs) renders correctly with test data
+- Each component (Page, Card, DataTable, NavTabs, Breadcrumbs) renders correctly with test data
 
 Functional tests use a `TestAdminPanel` fixture implementing `AdminPanelInterface` and test-only controllers.
 
