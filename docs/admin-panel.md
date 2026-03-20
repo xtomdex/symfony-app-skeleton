@@ -231,7 +231,7 @@ Priority components (first implementation phase):
 
 **DataTable** — pure presentation table. Props: `columns`, `items`, `sort`, `pagination`. No DTO contract — receives raw arrays/objects, renders HTML.
 
-**NavTabs** — navigation sub-tabs. Renders a row of links as second/third-level navigation. Props: `tabs` (list of `{label, url, active?, icon?}`). Not Bootstrap JS tabs — each link navigates to a separate route.
+**NavTabs** — navigation sub-tabs. Renders a row of links as second/third-level navigation. Props: `tabs` (list of `{label, url, active?, icon?}`), `style` (string, default `'tabs'`, options: `'tabs'`|`'pills'`). Not Bootstrap JS tabs — each link navigates to a separate route.
 
 ### Breadcrumb DTO
 

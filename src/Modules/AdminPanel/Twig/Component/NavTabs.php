@@ -29,4 +29,7 @@ final class NavTabs
      * @var list<array{label: string, url: string, active?: bool, icon?: string}>
      */
     public array $tabs = [];
+
+    /** Nav style: 'tabs' or 'pills' */
+    public string $style = 'tabs';
 }
