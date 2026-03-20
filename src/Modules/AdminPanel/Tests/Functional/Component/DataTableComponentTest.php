@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Modules\AdminPanel\Tests\Functional\Component;
 
+use App\Modules\AdminPanel\DTO\DataColumn;
+use App\Modules\AdminPanel\DTO\SortState;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Twig\Environment;
@@ -13,7 +15,14 @@ final class DataTableComponentTest extends KernelTestCase
     #[Test]
     public function renders_column_headers(): void
     {
-        $html = $this->renderTable();
+        $html = $this->render(
+            columns: [
+                new DataColumn('Name', 'name'),
+                new DataColumn('Email', 'email'),
+                new DataColumn('Status', 'status'),
+            ],
+            items: [['name' => 'John', 'email' => 'john@example.com', 'status' => 'Active']],
+        );
 
         self::assertStringContainsString('Name', $html);
         self::assertStringContainsString('Email', $html);
@@ -21,108 +30,143 @@ final class DataTableComponentTest extends KernelTestCase
     }
 
     #[Test]
-    public function renders_row_data(): void
+    public function renders_row_data_via_property_access(): void
     {
-        $html = $this->renderTable();
+        $html = $this->render(
+            columns: [new DataColumn('Name', 'name')],
+            items: [['name' => 'Jane Doe']],
+        );
 
-        self::assertStringContainsString('John Doe', $html);
-        self::assertStringContainsString('john@example.com', $html);
-        self::assertStringContainsString('Active', $html);
-        self::assertStringContainsString('Jane Smith', $html);
+        self::assertStringContainsString('Jane Doe', $html);
     }
 
     #[Test]
-    public function renders_sort_indicator_for_active_sort(): void
+    public function renders_row_data_via_template(): void
     {
-        $html = $this->renderTable();
+        $html = $this->render(
+            columns: [
+                new DataColumn(
+                    label: 'Name',
+                    template: '@admin_panel_test/datatable_test_cell.html.twig',
+                ),
+            ],
+            items: [['name' => 'john']],
+        );
 
-        // 'name' column is sorted asc — should show chevron-up
+        self::assertStringContainsString('test-cell', $html);
+        self::assertStringContainsString('JOHN', $html);
+    }
+
+    #[Test]
+    public function template_column_takes_priority_over_property(): void
+    {
+        $html = $this->render(
+            columns: [
+                new DataColumn(
+                    label: 'Name',
+                    property: 'name',
+                    template: '@admin_panel_test/datatable_test_cell.html.twig',
+                ),
+            ],
+            items: [['name' => 'alice']],
+        );
+
+        // Template output is uppercased via |upper filter; direct property would be lowercase
+        self::assertStringContainsString('ALICE', $html);
+        self::assertStringContainsString('test-cell', $html);
+    }
+
+    #[Test]
+    public function sortable_column_renders_as_link(): void
+    {
+        $html = $this->render(
+            columns: [new DataColumn('Name', 'name', sortable: true)],
+            items: [['name' => 'John']],
+        );
+
+        self::assertStringContainsString('<a ', $html);
+        self::assertStringContainsString('sort=name', $html);
+    }
+
+    #[Test]
+    public function non_sortable_column_renders_as_plain_text(): void
+    {
+        $html = $this->render(
+            columns: [new DataColumn('Email', 'email')],
+            items: [['email' => 'test@example.com']],
+        );
+
+        self::assertStringNotContainsString('sort=email', $html);
+    }
+
+    #[Test]
+    public function active_sort_asc_shows_chevron_up_icon(): void
+    {
+        $html = $this->render(
+            columns: [new DataColumn('Name', 'name', sortable: true)],
+            items: [['name' => 'John']],
+            sort: new SortState('name', 'asc'),
+        );
+
         self::assertStringContainsString('tabler-chevron-up', $html);
     }
 
     #[Test]
-    public function renders_sort_link_for_sortable_columns(): void
+    public function active_sort_desc_shows_chevron_down_icon(): void
     {
-        $html = $this->renderTable();
+        $html = $this->render(
+            columns: [new DataColumn('Name', 'name', sortable: true)],
+            items: [['name' => 'John']],
+            sort: new SortState('name', 'desc'),
+        );
 
-        self::assertStringContainsString('?sort=name', $html);
+        self::assertStringContainsString('tabler-chevron-down', $html);
     }
 
     #[Test]
-    public function renders_pagination(): void
+    public function empty_items_renders_empty_message_with_colspan(): void
     {
-        $html = $this->renderTable();
+        $html = $this->render(
+            columns: [new DataColumn('Name', 'name'), new DataColumn('Email', 'email')],
+            items: [],
+        );
 
-        self::assertStringContainsString('page-item', $html);
-        self::assertStringContainsString('?page=2', $html);
+        self::assertStringContainsString('No records found', $html);
+        self::assertStringContainsString('colspan="2"', $html);
     }
 
     #[Test]
-    public function renders_empty_state_when_no_items(): void
+    public function custom_empty_message_is_displayed(): void
     {
-        $html = $this->renderTableEmpty();
+        $html = $this->render(
+            columns: [new DataColumn('Name', 'name')],
+            items: [],
+            emptyMessage: 'Nothing to show here',
+        );
 
-        self::assertStringContainsString('admin.table.empty', $html);
+        self::assertStringContainsString('Nothing to show here', $html);
     }
 
-    #[Test]
-    public function does_not_render_pagination_for_single_page(): void
-    {
-        $html = $this->renderTableSinglePage();
-
-        self::assertStringNotContainsString('page-item', $html);
-    }
-
-    private function renderTable(): string
-    {
-        return $this->render([
-            'columns' => [
-                ['key' => 'name', 'label' => 'Name', 'sortable' => true],
-                ['key' => 'email', 'label' => 'Email'],
-                ['key' => 'status', 'label' => 'Status'],
-            ],
-            'items' => [
-                ['name' => 'John Doe', 'email' => 'john@example.com', 'status' => 'Active'],
-                ['name' => 'Jane Smith', 'email' => 'jane@example.com', 'status' => 'Inactive'],
-            ],
-            'sort' => ['key' => 'name', 'direction' => 'asc'],
-            'pagination' => ['page' => 1, 'pages' => 3, 'total' => 25],
-        ]);
-    }
-
-    private function renderTableEmpty(): string
-    {
-        return $this->render([
-            'columns' => [
-                ['key' => 'name', 'label' => 'Name'],
-            ],
-            'items' => [],
-            'sort' => null,
-            'pagination' => null,
-        ]);
-    }
-
-    private function renderTableSinglePage(): string
-    {
-        return $this->render([
-            'columns' => [
-                ['key' => 'name', 'label' => 'Name'],
-            ],
-            'items' => [
-                ['name' => 'Only One'],
-            ],
-            'sort' => null,
-            'pagination' => ['page' => 1, 'pages' => 1, 'total' => 1],
-        ]);
-    }
-
-    private function render(array $context): string
-    {
+    /**
+     * @param list<DataColumn>       $columns
+     * @param list<array|object>     $items
+     */
+    private function render(
+        array $columns,
+        array $items,
+        ?SortState $sort = null,
+        string $emptyMessage = 'No records found',
+    ): string {
         self::bootKernel();
 
         /** @var Environment $twig */
         $twig = self::getContainer()->get(Environment::class);
 
-        return $twig->render('@admin_panel_test/datatable_test.html.twig', $context);
+        return $twig->render('@admin_panel_test/datatable_test.html.twig', [
+            'columns' => $columns,
+            'items' => $items,
+            'sort' => $sort,
+            'emptyMessage' => $emptyMessage,
+        ]);
     }
 }

@@ -229,11 +229,13 @@ Priority components (first implementation phase):
 
 **Card** — content card. Props: `title`, `subtitle`, `icon` (?string, default `null` — optional Iconify icon rendered before the title). Slots: `actions`, default content (body), `footer`.
 
-**DataTable** — pure presentation table. Props: `columns`, `items`, `sort`, `pagination`. No DTO contract — receives raw arrays/objects, renders HTML.
+**DataTable** — pure presentation table component. Props: `columns` (list of `DataColumn`), `items` (list of arrays/objects), `sort` (`?SortState`, default `null`), `emptyMessage` (string, default `'No records found'`). Column matching: `template` takes priority over `property`. `property` uses Twig `attribute()`. `template` is included with `{ item: item }` context. Sort URLs built automatically from current request URL, toggling direction on repeated click. Does NOT handle data fetching, query building, or pagination — pure rendering.
+
+**Pagination** — standalone pagination component, used alongside DataTable or independently. Props: `currentPage` (int), `totalPages` (int), `pageSize` (int, default `20`), `pageSizeOptions` (list of int, default `[10, 20, 50, 100]`). Builds page/pageSize URLs from current request URL, preserving other query params. PageSize change resets to page 1. Not rendered when `totalPages <= 1` and single pageSize option.
 
 **NavTabs** — navigation sub-tabs. Renders a row of links as second/third-level navigation. Props: `tabs` (list of `{label, url, active?, icon?}`), `style` (string, default `'tabs'`, options: `'tabs'`|`'pills'`). Not Bootstrap JS tabs — each link navigates to a separate route.
 
-### Breadcrumb DTO
+### Presentation DTOs
 
 `Breadcrumb` is a `final readonly` DTO used by the Page and Breadcrumbs components:
 
@@ -253,6 +255,39 @@ final readonly class Breadcrumb
 `url` — link target. `null` for the last (current) breadcrumb, which renders as plain text.
 
 `icon` — optional Iconify icon identifier rendered in place of or alongside the label.
+
+`DataColumn` is a `final readonly` DTO used by the DataTable component:
+
+```php
+final readonly class DataColumn
+{
+    public function __construct(
+        public string $label,
+        public ?string $property = null,
+        public ?string $template = null,
+        public bool $sortable = false,
+        public ?string $sortField = null,
+    ) {}
+}
+```
+
+`property` — key for array items or property/getter name for objects, accessed via Twig `attribute()`.
+
+`template` — path to a Twig template rendered with `{ item: item }` context. Takes priority over `property`.
+
+`sortField` — query parameter value for sorting. Defaults to `property` when null.
+
+`SortState` is a `final readonly` DTO representing the current sort state:
+
+```php
+final readonly class SortState
+{
+    public function __construct(
+        public string $field,
+        public string $direction, // 'asc' or 'desc'
+    ) {}
+}
+```
 
 ## 4.3 DataTable Design
 
@@ -489,6 +524,10 @@ Must cover:
 - `ResolveAdminPanelListener` — attribute set on match, skipped on sub-request, null on no match
 - `AdminUiTwigExtension` — function registration, exception when no panel in request
 - `Breadcrumbs` component — `getResolvedItems()` prepends home breadcrumb, appends placeholder when items empty, falls back to `/` when no panel in request
+- `DataColumn` — creation with all params, defaults, label-only construction
+- `SortState` — creation, field access
+- `DataTable` component — `sortUrl()` direction logic, direction toggling, query param preservation, `sortField` fallback; `sortDirection()` matching and null cases
+- `Pagination` component — `pageUrl()` with param preservation, `pageSizeUrl()` page reset, `getPageRange()` centering and clamping
 
 ## 7.4 Functional Tests
 
@@ -497,7 +536,7 @@ Must cover:
 - Sidebar renders menu items from test panel
 - Navbar renders user dropdown when user is present
 - Navbar handles null user (unauthenticated)
-- Each component (Page, Card, DataTable, NavTabs, Breadcrumbs) renders correctly with test data
+- Each component (Page, Card, DataTable, Pagination, NavTabs, Breadcrumbs) renders correctly with test data
 
 Functional tests use a `TestAdminPanel` fixture implementing `AdminPanelInterface` and test-only controllers.
 
