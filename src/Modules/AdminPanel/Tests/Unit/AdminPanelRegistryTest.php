@@ -22,7 +22,7 @@ final class AdminPanelRegistryTest extends TestCase
         $panel = new MainTestPanel();
         $registry = new AdminPanelRegistry([$panel]);
 
-        $request = Request::create('/admin/users');
+        $request = Request::create('/test-admin/users');
 
         self::assertSame($panel, $registry->resolveByRequest($request));
     }
@@ -55,7 +55,7 @@ final class AdminPanelRegistryTest extends TestCase
         $panel = new MainTestPanel();
         $registry = new AdminPanelRegistry([$panel]);
 
-        $request = Request::create('/admin');
+        $request = Request::create('/test-admin');
 
         self::assertSame($panel, $registry->resolveByRequest($request));
     }
@@ -66,7 +66,7 @@ final class AdminPanelRegistryTest extends TestCase
         $panel = new MainTestPanel();
         $registry = new AdminPanelRegistry([$panel]);
 
-        self::assertSame($panel, $registry->get('main'));
+        self::assertSame($panel, $registry->get('test'));
     }
 
     #[Test]
@@ -84,7 +84,7 @@ final class AdminPanelRegistryTest extends TestCase
     public function constructor_throws_on_duplicate_name(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Duplicate admin panel name "main"');
+        $this->expectExceptionMessage('Duplicate admin panel name "test"');
 
         new AdminPanelRegistry([new MainTestPanel(), new DuplicateNamePanel()]);
     }

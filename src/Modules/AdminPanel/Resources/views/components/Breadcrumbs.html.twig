@@ -1,0 +1,27 @@
+{% set resolved = this.resolvedItems %}
+{% if resolved|length > 0 %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        {% for crumb in resolved %}
+            {% if loop.last and not loop.first %}
+                <li class="breadcrumb-item active" aria-current="page">
+                    {% if crumb.icon %}<i class="ti {{ crumb.icon }}"></i>{% endif %}
+                    {{ crumb.label }}
+                </li>
+            {% else %}
+                <li class="breadcrumb-item">
+                    {% if crumb.url %}
+                        <a href="{{ crumb.url }}">
+                            {% if crumb.icon %}<i class="ti {{ crumb.icon }}"></i>{% endif %}
+                            {{ crumb.label }}
+                        </a>
+                    {% else %}
+                        {% if crumb.icon %}<i class="ti {{ crumb.icon }}"></i>{% endif %}
+                        {{ crumb.label }}
+                    {% endif %}
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ol>
+</nav>
+{% endif %}

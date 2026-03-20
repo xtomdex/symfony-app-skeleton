@@ -44,4 +44,11 @@ interface AdminPanelInterface
      * Footer content.
      */
     public function footer(): FooterConfig;
+
+    /**
+     * Absolute URL path for the panel's home page.
+     * Used as breadcrumb root link.
+     * Example: '/admin', '/partner/dashboard'
+     */
+    public function homePath(): string;
 }

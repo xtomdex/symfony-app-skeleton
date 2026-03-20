@@ -22,8 +22,8 @@ final class NavbarRenderTest extends KernelTestCase
 
         self::assertStringContainsString('Test Admin', $html);
         self::assertStringContainsString('Admin', $html);
-        self::assertStringContainsString('/admin/profile', $html);
-        self::assertStringContainsString('/admin/logout', $html);
+        self::assertStringContainsString('/test-admin/profile', $html);
+        self::assertStringContainsString('/test-admin/logout', $html);
     }
 
     #[Test]
@@ -49,7 +49,7 @@ final class NavbarRenderTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $request = Request::create('/admin');
+        $request = Request::create('/test-admin');
         $request->attributes->set(ResolveAdminPanelListener::REQUEST_ATTRIBUTE, $panel);
 
         /** @var RequestStack $requestStack */

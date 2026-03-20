@@ -29,7 +29,7 @@ final class ResolveAdminPanelListenerTest extends TestCase
     #[Test]
     public function sets_panel_attribute_on_matching_request(): void
     {
-        $request = Request::create('/admin/dashboard');
+        $request = Request::create('/test-admin/dashboard');
         $event = $this->createMainRequestEvent($request);
 
         ($this->listener)($event);
@@ -55,7 +55,7 @@ final class ResolveAdminPanelListenerTest extends TestCase
     #[Test]
     public function skips_sub_requests(): void
     {
-        $request = Request::create('/admin/dashboard');
+        $request = Request::create('/test-admin/dashboard');
         $event = $this->createSubRequestEvent($request);
 
         ($this->listener)($event);
