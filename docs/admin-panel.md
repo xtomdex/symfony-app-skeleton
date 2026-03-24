@@ -81,7 +81,8 @@ Data preparation is the responsibility of the project's controllers and use case
     │   │   ├── Page.php
     │   │   ├── Card.php
     │   │   ├── DataTable.php
-    │   │   └── NavTabs.php
+    │   │   ├── NavTabs.php
+    │   │   └── Modal.php
     │   └── Extension/
     │       └── AdminUiTwigExtension.php
     ├── AdminPanelRegistry.php
@@ -103,7 +104,8 @@ Data preparation is the responsibility of the project's controllers and use case
     │   │       ├── Page.html.twig
     │   │       ├── Card.html.twig
     │   │       ├── DataTable.html.twig
-    │   │       └── NavTabs.html.twig
+    │   │       ├── NavTabs.html.twig
+    │   │       └── Modal.html.twig
     │   ├── assets/
     │   │   ├── admin.js              ← JS-only entry (no SCSS import)
     │   │   ├── scss/
@@ -234,6 +236,8 @@ Priority components (first implementation phase):
 **Pagination** — standalone pagination component, used alongside DataTable or independently. Props: `currentPage` (int), `totalPages` (int), `pageSize` (int, default `20`), `pageSizeOptions` (list of int, default `[10, 20, 50, 100]`). Builds page/pageSize URLs from current request URL, preserving other query params. PageSize change resets to page 1. Not rendered when `totalPages <= 1` and single pageSize option.
 
 **NavTabs** — navigation sub-tabs. Renders a row of links as second/third-level navigation. Props: `tabs` (list of `{label, url, active?, icon?}`), `style` (string, default `'tabs'`, options: `'tabs'`|`'pills'`). Not Bootstrap JS tabs — each link navigates to a separate route.
+
+**Modal** — modal dialog component, pure presentation. Props: `id` (string, required — used as HTML id and data-bs-target value), `title` (string, default `''`), `size` (?string, default `null`, options: `null`|`'sm'`|`'lg'`|`'xl'`), `scrollable` (bool, default `false`), `staticBackdrop` (bool, default `false`), `centered` (bool, default `false`), `closable` (bool, default `true`). Slots: default (body content), `footer`. Header is only rendered when `title` is non-empty or `closable=true`. Footer wrapper is only rendered when the footer slot has content. Does NOT manage forms — use standard `form_start()`/`form_end()` inside the body slot, connecting submit buttons via the HTML5 `form="formId"` attribute. Note: `data-bs-dismiss="modal"` on footer buttons works regardless of `staticBackdrop`/`closable` settings.
 
 ### Presentation DTOs
 
@@ -528,6 +532,7 @@ Must cover:
 - `SortState` — creation, field access
 - `DataTable` component — `sortUrl()` direction logic, direction toggling, query param preservation, `sortField` fallback; `sortDirection()` matching and null cases
 - `Pagination` component — `pageUrl()` with param preservation, `pageSizeUrl()` page reset, `getPageRange()` centering and clamping
+- `Modal` component — default property values (title, size, scrollable, staticBackdrop, centered, closable)
 
 ## 7.4 Functional Tests
 
@@ -536,7 +541,7 @@ Must cover:
 - Sidebar renders menu items from test panel
 - Navbar renders user dropdown when user is present
 - Navbar handles null user (unauthenticated)
-- Each component (Page, Card, DataTable, Pagination, NavTabs, Breadcrumbs) renders correctly with test data
+- Each component (Page, Card, DataTable, Pagination, NavTabs, Breadcrumbs, Modal) renders correctly with test data
 
 Functional tests use a `TestAdminPanel` fixture implementing `AdminPanelInterface` and test-only controllers.
 
