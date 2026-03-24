@@ -198,6 +198,11 @@ final readonly class FakeEventForFlusher implements DomainEventInterface
     {
         return $this->id;
     }
+
+    public function getPayload(): array
+    {
+        return ['id' => $this->id];
+    }
 }
 
 final class FakeRootForFlusher implements AggregateRoot
