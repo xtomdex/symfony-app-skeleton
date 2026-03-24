@@ -64,6 +64,23 @@ final class CardComponentTest extends KernelTestCase
         self::assertStringContainsString('Just body content', $html);
     }
 
+    #[Test]
+    public function renders_icon_when_provided(): void
+    {
+        $html = $this->renderCard('card_icon_test.html.twig');
+
+        self::assertStringContainsString('ti tabler-user', $html);
+        self::assertStringContainsString('Icon Card', $html);
+    }
+
+    #[Test]
+    public function renders_without_icon_element_when_icon_is_null(): void
+    {
+        $html = $this->renderCard('card_minimal_test.html.twig');
+
+        self::assertStringNotContainsString('<i class="ti ', $html);
+    }
+
     private function renderCard(string $template): string
     {
         self::bootKernel();

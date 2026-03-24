@@ -44,4 +44,9 @@ final class PartnerTestPanel implements AdminPanelInterface
     {
         return FooterConfig::create('© Partner Company');
     }
+
+    public function homePath(): string
+    {
+        return '/partner';
+    }
 }

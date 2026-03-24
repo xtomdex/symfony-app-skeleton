@@ -15,10 +15,11 @@ use App\Modules\AdminPanel\DTO\FooterConfig;
  */
 final class DuplicateNamePanel implements AdminPanelInterface
 {
-    public static function name(): string { return 'main'; }
+    public static function name(): string { return 'test'; }
     public static function routePrefix(): string { return '/other'; }
     public function brand(): BrandConfig { return BrandConfig::create('Dup'); }
     public function menuItems(): array { return []; }
     public function userView(): ?AdminUserView { return null; }
     public function footer(): FooterConfig { return FooterConfig::create('Dup'); }
+    public function homePath(): string { return '/other'; }
 }

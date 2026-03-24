@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\AdminPanel\Twig\Component;
 
+use App\Modules\AdminPanel\DTO\Breadcrumb;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 /**
@@ -23,11 +24,9 @@ final class Page
 {
     public string $title;
 
-    /**
-     * Breadcrumb items: list of ['label' => string, 'url' => string|null].
-     * Last item is rendered without a link (current page).
-     *
-     * @var list<array{label: string, url: string|null}>
-     */
+    /** @var list<Breadcrumb> */
     public array $breadcrumbs = [];
+
+    /** Whether Breadcrumbs component shows home root */
+    public bool $showHome = true;
 }

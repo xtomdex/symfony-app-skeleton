@@ -27,4 +27,5 @@ final class Card
 {
     public ?string $title = null;
     public ?string $subtitle = null;
+    public ?string $icon = null;
 }

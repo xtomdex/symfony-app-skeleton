@@ -3,7 +3,7 @@
         <div class="card-header d-flex align-items-center justify-content-between">
             <div>
                 {% if title %}
-                    <h5 class="card-title mb-0">{{ title }}</h5>
+                    <h5 class="card-title mb-0">{% if icon %}<i class="ti {{ icon }} me-1"></i>{% endif %}{{ title }}</h5>
                 {% endif %}
                 {% if subtitle %}
                     <small class="text-body-secondary">{{ subtitle }}</small>

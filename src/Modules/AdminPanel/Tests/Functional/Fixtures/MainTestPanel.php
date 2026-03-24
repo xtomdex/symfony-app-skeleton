@@ -14,12 +14,12 @@ final class MainTestPanel implements AdminPanelInterface
 {
     public static function name(): string
     {
-        return 'main';
+        return 'test';
     }
 
     public static function routePrefix(): string
     {
-        return '/admin';
+        return '/test-admin';
     }
 
     public function brand(): BrandConfig
@@ -32,9 +32,9 @@ final class MainTestPanel implements AdminPanelInterface
     {
         return [
             MenuItem::section('Management'),
-            MenuItem::linkToUrl('Dashboard', '/admin/dashboard')
+            MenuItem::linkToUrl('Dashboard', '/test-admin/dashboard')
                 ->withIcon('tabler-dashboard'),
-            MenuItem::linkToUrl('Users', '/admin/users')
+            MenuItem::linkToUrl('Users', '/test-admin/users')
                 ->withIcon('tabler-users')
                 ->withRoutePrefix('test_admin_user'),
         ];
@@ -46,13 +46,18 @@ final class MainTestPanel implements AdminPanelInterface
             displayName: 'Test Admin',
             avatarUrl: null,
             role: 'Admin',
-            profileUrl: '/admin/profile',
-            logoutUrl: '/admin/logout',
+            profileUrl: '/test-admin/profile',
+            logoutUrl: '/test-admin/logout',
         );
     }
 
     public function footer(): FooterConfig
     {
         return FooterConfig::create('© Test Company');
+    }
+
+    public function homePath(): string
+    {
+        return '/test-admin';
     }
 }

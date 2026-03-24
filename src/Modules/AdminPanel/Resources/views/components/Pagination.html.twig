@@ -1,0 +1,34 @@
+{% if totalPages > 1 or pageSizeOptions|length > 1 %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mt-3">
+    {% if totalPages > 1 %}
+        <nav aria-label="Pagination">
+            <ul class="pagination pagination-sm mb-0">
+                <li class="page-item {{ currentPage == 1 ? 'disabled' }}">
+                    <a class="page-link" href="{{ this.pageUrl(currentPage - 1) }}">&laquo;</a>
+                </li>
+                {% for page in this.pageRange %}
+                    <li class="page-item {{ page == currentPage ? 'active' }}">
+                        <a class="page-link" href="{{ this.pageUrl(page) }}">{{ page }}</a>
+                    </li>
+                {% endfor %}
+                <li class="page-item {{ currentPage == totalPages ? 'disabled' }}">
+                    <a class="page-link" href="{{ this.pageUrl(currentPage + 1) }}">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
+    {% endif %}
+
+    {% if pageSizeOptions|length > 1 %}
+        <div class="d-flex align-items-center gap-2">
+            <small class="text-muted">Show:</small>
+            <select class="form-select form-select-sm" style="width: auto;" onchange="window.location.href=this.value">
+                {% for size in pageSizeOptions %}
+                    <option value="{{ this.pageSizeUrl(size) }}" {{ size == pageSize ? 'selected' }}>
+                        {{ size }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    {% endif %}
+</div>
+{% endif %}

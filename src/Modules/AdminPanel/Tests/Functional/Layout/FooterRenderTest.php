@@ -35,7 +35,7 @@ final class FooterRenderTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $request = Request::create('/admin');
+        $request = Request::create('/test-admin');
         $request->attributes->set(
             ResolveAdminPanelListener::REQUEST_ATTRIBUTE,
             new MainTestPanel(),

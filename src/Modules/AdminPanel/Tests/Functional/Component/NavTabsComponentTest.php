@@ -57,6 +57,28 @@ final class NavTabsComponentTest extends KernelTestCase
         self::assertStringContainsString('nav-link', $html);
     }
 
+    #[Test]
+    public function default_style_renders_nav_tabs_class(): void
+    {
+        $html = $this->renderTabs();
+
+        self::assertStringContainsString('nav-tabs', $html);
+    }
+
+    #[Test]
+    public function pills_style_renders_nav_pills_class(): void
+    {
+        self::bootKernel();
+
+        /** @var Environment $twig */
+        $twig = self::getContainer()->get(Environment::class);
+
+        $html = $twig->render('@admin_panel_test/navtabs_pills_test.html.twig', ['tabs' => $this->sampleTabs()]);
+
+        self::assertStringContainsString('nav-pills', $html);
+        self::assertStringNotContainsString('nav-tabs', $html);
+    }
+
     private function renderTabs(): string
     {
         self::bootKernel();
@@ -64,12 +86,18 @@ final class NavTabsComponentTest extends KernelTestCase
         /** @var Environment $twig */
         $twig = self::getContainer()->get(Environment::class);
 
-        return $twig->render('@admin_panel_test/navtabs_test.html.twig', [
-            'tabs' => [
-                ['label' => 'General', 'url' => '/admin/users/1/edit', 'active' => true],
-                ['label' => 'Security', 'url' => '/admin/users/1/security'],
-                ['label' => 'Activity', 'url' => '/admin/users/1/activity', 'icon' => 'tabler-history'],
-            ],
-        ]);
+        return $twig->render('@admin_panel_test/navtabs_test.html.twig', ['tabs' => $this->sampleTabs()]);
+    }
+
+    /**
+     * @return list<array{label: string, url: string, active?: bool, icon?: string}>
+     */
+    private function sampleTabs(): array
+    {
+        return [
+            ['label' => 'General', 'url' => '/admin/users/1/edit', 'active' => true],
+            ['label' => 'Security', 'url' => '/admin/users/1/security'],
+            ['label' => 'Activity', 'url' => '/admin/users/1/activity', 'icon' => 'tabler-history'],
+        ];
     }
 }

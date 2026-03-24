@@ -70,7 +70,7 @@ final class SidebarRenderTest extends KernelTestCase
 
     private function pushAdminRequest(): void
     {
-        $request = Request::create('/admin/dashboard');
+        $request = Request::create('/test-admin/dashboard');
         $request->attributes->set('_route', 'test_admin_dashboard');
         $request->attributes->set(
             ResolveAdminPanelListener::REQUEST_ATTRIBUTE,

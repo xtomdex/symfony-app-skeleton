@@ -4,55 +4,77 @@ declare(strict_types=1);
 
 namespace App\Modules\AdminPanel\Twig\Component;
 
+use App\Modules\AdminPanel\DTO\DataColumn;
+use App\Modules\AdminPanel\DTO\SortState;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 /**
  * Pure presentation data table component.
  *
- * Receives prepared data and renders a table with optional sorting indicators
- * and pagination. Does not query databases or contain business logic.
+ * Receives prepared column definitions, row data, and optional sort state.
+ * Renders a responsive Bootstrap table with sortable column headers.
+ * Does not query databases or contain business logic.
  *
  * Usage:
  *     <twig:Admin:DataTable
- *         :columns="[
- *             {key: 'name', label: 'Name', sortable: true},
- *             {key: 'email', label: 'Email'},
- *             {key: 'status', label: 'Status'},
- *         ]"
+ *         :columns="[new DataColumn('Name', 'name', sortable: true), ...]"
  *         :items="users"
- *         :sort="{key: 'name', direction: 'asc'}"
- *         :pagination="{page: 1, pages: 10, total: 95}"
+ *         :sort="new SortState('name', 'asc')"
  *     />
  */
 #[AsTwigComponent]
 final class DataTable
 {
-    /**
-     * Column definitions.
-     * Each column: ['key' => string, 'label' => string, 'sortable' => bool].
-     *
-     * @var list<array{key: string, label: string, sortable?: bool}>
-     */
+    /** @var list<DataColumn> */
     public array $columns = [];
 
-    /**
-     * Row data. Each item is an associative array keyed by column keys.
-     *
-     * @var list<array<string, mixed>>
-     */
+    /** @var list<array|object> */
     public array $items = [];
 
-    /**
-     * Current sort state: ['key' => string, 'direction' => 'asc'|'desc'] or null.
-     *
-     * @var array{key: string, direction: string}|null
-     */
-    public ?array $sort = null;
+    /** Current sort state, null when no sorting applied */
+    public ?SortState $sort = null;
+
+    /** Message shown when items array is empty */
+    public string $emptyMessage = 'No records found';
+
+    public function __construct(private readonly RequestStack $requestStack) {}
 
     /**
-     * Pagination state: ['page' => int, 'pages' => int, 'total' => int] or null.
-     *
-     * @var array{page: int, pages: int, total: int}|null
+     * Builds a URL for sorting by the given column.
+     * Preserves all current query parameters, replaces sort/direction.
+     * If already sorted by this field, toggles direction.
      */
-    public ?array $pagination = null;
+    public function sortUrl(DataColumn $column): string
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        $sortField = $column->sortField ?? $column->property;
+
+        $direction = 'asc';
+        if ($this->sort !== null && $this->sort->field === $sortField) {
+            $direction = $this->sort->direction === 'asc' ? 'desc' : 'asc';
+        }
+
+        $params = $request?->query->all() ?? [];
+        $params['sort'] = $sortField;
+        $params['direction'] = $direction;
+
+        $baseUrl = $request?->getPathInfo() ?? '';
+
+        return $baseUrl . '?' . http_build_query($params);
+    }
+
+    /**
+     * Returns the current sort direction for a given column, or null if not sorted by this column.
+     */
+    public function sortDirection(DataColumn $column): ?string
+    {
+        $sortField = $column->sortField ?? $column->property;
+
+        if ($this->sort !== null && $this->sort->field === $sortField) {
+            return $this->sort->direction;
+        }
+
+        return null;
+    }
 }

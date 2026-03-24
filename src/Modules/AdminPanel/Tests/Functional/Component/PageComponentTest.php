@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\AdminPanel\Tests\Functional\Component;
 
+use App\Modules\AdminPanel\DTO\Breadcrumb;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Twig\Environment;
@@ -23,10 +24,16 @@ final class PageComponentTest extends KernelTestCase
     {
         $html = $this->renderPage();
 
-        self::assertStringContainsString('Home', $html);
-        self::assertStringContainsString('/admin', $html);
         self::assertStringContainsString('Users', $html);
         self::assertStringContainsString('aria-current="page"', $html);
+    }
+
+    #[Test]
+    public function renders_home_icon_when_showHome_true(): void
+    {
+        $html = $this->renderPage();
+
+        self::assertStringContainsString('tabler-home', $html);
     }
 
     #[Test]
@@ -46,6 +53,14 @@ final class PageComponentTest extends KernelTestCase
         self::assertStringContainsString('Test page content', $html);
     }
 
+    #[Test]
+    public function renders_home_icon_when_no_breadcrumbs(): void
+    {
+        $html = $this->renderPageWithoutBreadcrumbs();
+
+        self::assertStringContainsString('tabler-home', $html);
+    }
+
     private function renderPage(): string
     {
         self::bootKernel();
@@ -55,9 +70,20 @@ final class PageComponentTest extends KernelTestCase
 
         return $twig->render('@admin_panel_test/page_test.html.twig', [
             'breadcrumbs' => [
-                ['label' => 'Home', 'url' => '/admin'],
-                ['label' => 'Users', 'url' => null],
+                new Breadcrumb(label: 'Users', url: '/admin/users'),
             ],
+        ]);
+    }
+
+    private function renderPageWithoutBreadcrumbs(): string
+    {
+        self::bootKernel();
+
+        /** @var Environment $twig */
+        $twig = self::getContainer()->get(Environment::class);
+
+        return $twig->render('@admin_panel_test/page_test.html.twig', [
+            'breadcrumbs' => [],
         ]);
     }
 }
