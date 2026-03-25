@@ -20,7 +20,7 @@ final readonly class CreateRootUserHandler
     public function __invoke(CreateRootUserCommand $cmd): User
     {
         $existing = $this->entityManager->getRepository(User::class)->findOneBy([
-            'type' => UserType::ROOT,
+            'type' => UserType::Root,
         ]);
 
         if ($existing) {

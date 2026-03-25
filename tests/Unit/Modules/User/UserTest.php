@@ -27,9 +27,9 @@ final class UserTest extends TestCase
         self::assertSame('uuid-1', $user->getId());
         self::assertSame('john', $user->getUsername());
         self::assertSame('hashed_pw', $user->getPassword());
-        self::assertSame([UserRole::USER->value], $user->getRoles());
-        self::assertSame(UserStatus::ACTIVE, $user->getStatus());
-        self::assertSame(UserType::CLIENT, $user->getType());
+        self::assertSame([UserRole::User->value], $user->getRoles());
+        self::assertSame(UserStatus::Active, $user->getStatus());
+        self::assertSame(UserType::Client, $user->getType());
     }
 
     public function test_create_records_user_created_event(): void

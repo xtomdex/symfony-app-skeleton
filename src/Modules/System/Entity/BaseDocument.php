@@ -65,7 +65,7 @@ class BaseDocument implements EntityInterface
         $document->content = $content;
         $document->type = $type;
         $document->description = $description;
-        $document->status = DocumentStatus::DRAFT;
+        $document->status = DocumentStatus::Draft;
         $document->editedAt = new \DateTimeImmutable();
 
         return $document;
@@ -73,7 +73,7 @@ class BaseDocument implements EntityInterface
 
     public function publish(): void
     {
-        $this->status = DocumentStatus::PUBLISHED;
+        $this->status = DocumentStatus::Published;
         if ($this->publishedAt === null) {
             $this->publishedAt = new \DateTimeImmutable();
         }
@@ -81,7 +81,7 @@ class BaseDocument implements EntityInterface
 
     public function archive(): void
     {
-        $this->status = DocumentStatus::ARCHIVED;
+        $this->status = DocumentStatus::Archived;
     }
 
     public function updateContent(

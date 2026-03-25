@@ -6,7 +6,7 @@ namespace App\Modules\System\Enum;
 
 enum DocumentStatus: string
 {
-    case DRAFT = 'draft';
-    case PUBLISHED = 'published';
-    case ARCHIVED = 'archived';
+    case Draft = 'draft';
+    case Published = 'published';
+    case Archived = 'archived';
 }

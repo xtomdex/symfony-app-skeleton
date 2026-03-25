@@ -6,7 +6,7 @@ namespace App\Modules\User\Enum;
 
 enum UserType: string
 {
-    case CLIENT = 'client';
-    case ADMIN = 'admin';
-    case ROOT = 'root';
+    case Client = 'client';
+    case Admin = 'admin';
+    case Root = 'root';
 }

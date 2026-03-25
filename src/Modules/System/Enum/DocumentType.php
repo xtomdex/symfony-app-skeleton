@@ -6,6 +6,6 @@ namespace App\Modules\System\Enum;
 
 enum DocumentType: string
 {
-    case LEGAL = 'legal';
-    case PAGE = 'page';
+    case Legal = 'legal';
+    case Page = 'page';
 }

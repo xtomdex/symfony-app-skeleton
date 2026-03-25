@@ -11,31 +11,31 @@ final class DocumentStatusTest extends TestCase
 {
     public function test_draft_has_correct_value(): void
     {
-        self::assertSame('draft', DocumentStatus::DRAFT->value);
+        self::assertSame('draft', DocumentStatus::Draft->value);
     }
 
     public function test_published_has_correct_value(): void
     {
-        self::assertSame('published', DocumentStatus::PUBLISHED->value);
+        self::assertSame('published', DocumentStatus::Published->value);
     }
 
     public function test_archived_has_correct_value(): void
     {
-        self::assertSame('archived', DocumentStatus::ARCHIVED->value);
+        self::assertSame('archived', DocumentStatus::Archived->value);
     }
 
     public function test_from_draft(): void
     {
-        self::assertSame(DocumentStatus::DRAFT, DocumentStatus::from('draft'));
+        self::assertSame(DocumentStatus::Draft, DocumentStatus::from('draft'));
     }
 
     public function test_from_published(): void
     {
-        self::assertSame(DocumentStatus::PUBLISHED, DocumentStatus::from('published'));
+        self::assertSame(DocumentStatus::Published, DocumentStatus::from('published'));
     }
 
     public function test_from_archived(): void
     {
-        self::assertSame(DocumentStatus::ARCHIVED, DocumentStatus::from('archived'));
+        self::assertSame(DocumentStatus::Archived, DocumentStatus::from('archived'));
     }
 }

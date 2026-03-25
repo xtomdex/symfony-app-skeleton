@@ -24,7 +24,7 @@ final class BaseDocumentTest extends TestCase
             title: 'Terms of Service',
             slug: 'terms-of-service',
             content: 'Full content here.',
-            type: DocumentType::LEGAL,
+            type: DocumentType::Legal,
             description: 'Our terms.',
         );
 
@@ -32,9 +32,9 @@ final class BaseDocumentTest extends TestCase
         self::assertSame('Terms of Service', $document->getTitle());
         self::assertSame('terms-of-service', $document->getSlug());
         self::assertSame('Full content here.', $document->getContent());
-        self::assertSame(DocumentType::LEGAL, $document->getType());
+        self::assertSame(DocumentType::Legal, $document->getType());
         self::assertSame('Our terms.', $document->getDescription());
-        self::assertSame(DocumentStatus::DRAFT, $document->getStatus());
+        self::assertSame(DocumentStatus::Draft, $document->getStatus());
         self::assertNotNull($document->getEditedAt());
         self::assertNull($document->getPublishedAt());
     }
@@ -46,7 +46,7 @@ final class BaseDocumentTest extends TestCase
             title: 'About',
             slug: 'about',
             content: 'About us.',
-            type: DocumentType::PAGE,
+            type: DocumentType::Page,
         );
 
         self::assertNull($document->getDescription());
@@ -59,12 +59,12 @@ final class BaseDocumentTest extends TestCase
             title: 'About',
             slug: 'about',
             content: 'About us.',
-            type: DocumentType::PAGE,
+            type: DocumentType::Page,
         );
 
         $document->publish();
 
-        self::assertSame(DocumentStatus::PUBLISHED, $document->getStatus());
+        self::assertSame(DocumentStatus::Published, $document->getStatus());
         self::assertNotNull($document->getPublishedAt());
     }
 
@@ -75,7 +75,7 @@ final class BaseDocumentTest extends TestCase
             title: 'About',
             slug: 'about',
             content: 'About us.',
-            type: DocumentType::PAGE,
+            type: DocumentType::Page,
         );
 
         $document->publish();
@@ -93,12 +93,12 @@ final class BaseDocumentTest extends TestCase
             title: 'About',
             slug: 'about',
             content: 'About us.',
-            type: DocumentType::PAGE,
+            type: DocumentType::Page,
         );
 
         $document->archive();
 
-        self::assertSame(DocumentStatus::ARCHIVED, $document->getStatus());
+        self::assertSame(DocumentStatus::Archived, $document->getStatus());
     }
 
     public function test_update_content(): void
@@ -108,7 +108,7 @@ final class BaseDocumentTest extends TestCase
             title: 'Old Title',
             slug: 'old-slug',
             content: 'Old content.',
-            type: DocumentType::PAGE,
+            type: DocumentType::Page,
             description: 'Old description.',
         );
 
@@ -126,7 +126,7 @@ final class BaseDocumentTest extends TestCase
             title: 'Title',
             slug: 'title',
             content: 'Content.',
-            type: DocumentType::PAGE,
+            type: DocumentType::Page,
         );
 
         $editedAtBefore = $document->getEditedAt();

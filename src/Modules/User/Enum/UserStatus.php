@@ -6,8 +6,8 @@ namespace App\Modules\User\Enum;
 
 enum UserStatus: string
 {
-    case PENDING = 'pending';
-    case ACTIVE = 'active';
-    case INACTIVE = 'inactive';
-    case BLOCKED = 'blocked';
+    case Pending = 'pending';
+    case Active = 'active';
+    case Inactive = 'inactive';
+    case Blocked = 'blocked';
 }

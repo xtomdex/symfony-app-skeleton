@@ -6,9 +6,9 @@ namespace App\Modules\User\Enum;
 
 enum UserRole: string
 {
-    case SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
-    case ADMIN = 'ROLE_ADMIN';
-    case USER = 'ROLE_USER';
+    case SuperAdmin = 'ROLE_SUPER_ADMIN';
+    case Admin = 'ROLE_ADMIN';
+    case User = 'ROLE_USER';
 
     public static function all(): array
     {
