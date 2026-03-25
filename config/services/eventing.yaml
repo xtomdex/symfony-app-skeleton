@@ -2,14 +2,24 @@ services:
     App\Domain\Eventing\Contract\EventDispatcherInterface:
         alias: App\Infrastructure\Eventing\EventDispatcher
 
+    App\Infrastructure\Eventing\Decorator\LoggingEventDispatcher:
+        arguments:
+            $inner: '@App\Infrastructure\Eventing\EventDispatcher'
+            $logger: '@monolog.logger.domain_event'
+
+    App\Infrastructure\Eventing\DoctrineFlusher:
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+            $dispatcher: '@App\Infrastructure\Eventing\Decorator\LoggingEventDispatcher'
+            $runner: '@App\Infrastructure\Transaction\DoctrineTransactionalRunner'
+
+    App\Infrastructure\Transaction\DoctrineTransactionalRunner:
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+            $dispatcher: '@App\Infrastructure\Eventing\Decorator\LoggingEventDispatcher'
+
     App\Domain\Eventing\Contract\FlusherInterface:
         alias: App\Infrastructure\Eventing\DoctrineFlusher
 
     App\Infrastructure\Transaction\TransactionalRunnerInterface:
         alias: App\Infrastructure\Transaction\DoctrineTransactionalRunner
-
-    App\Infrastructure\Eventing\Decorator\LoggingEventDispatcher:
-        decorates: App\Domain\Eventing\Contract\EventDispatcherInterface
-        arguments:
-            $inner: '@App\Infrastructure\Eventing\Decorator\LoggingEventDispatcher.inner'
-            $logger: '@monolog.logger.domain_event'

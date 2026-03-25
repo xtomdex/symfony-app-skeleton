@@ -12,4 +12,12 @@ final readonly class UserCreatedEvent implements DomainEventInterface
         public string $id,
         public string $username
     ) {}
+
+    public function getPayload(): array
+    {
+        return [
+            'id'       => $this->id,
+            'username' => $this->username,
+        ];
+    }
 }

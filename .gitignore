@@ -1,5 +1,6 @@
 ###> IDE ###
 .idea
+.claude
 /config/reference.php
 ###< IDE ###
 
@@ -21,3 +22,10 @@
 ###> docker ###
 /.env.docker
 ###< docker ###
+
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###

@@ -208,7 +208,36 @@ Test-only artifacts must not load in dev/prod environments.
 
 ---
 
-# 6. Extension Principles
+# 6. Service Loading Order
+
+## 6.1 File Hierarchy
+
+Service configuration is split across four files loaded in strict order:
+
+    services.yaml                ← entry point; imports services_core.yaml only
+    services_core.yaml           ← orchestrates load order; no service definitions
+    services_autodiscovery.yaml  ← _defaults + App\Infrastructure\, App\Modules\, App\UI\ auto-registration
+    services/<topic>.yaml        ← explicit interface aliases and argument overrides per topic
+
+## 6.2 Load Order
+
+Symfony processes `imports` before the file's own `services:` block, and processes multiple `imports` entries top-to-bottom. This means:
+
+1. `services_autodiscovery.yaml` runs first — registers all auto-discovered services
+2. `services/<topic>.yaml` files run second — explicit definitions override auto-registration
+
+This guarantees that any service defined in `services/` reliably overrides the auto-discovered version.
+
+## 6.3 Rule
+
+**Never add service definitions directly to `services.yaml` or `services_core.yaml`.**
+
+- Auto-registration belongs in `services_autodiscovery.yaml`
+- Interface aliases and explicit argument wiring belong in `services/<topic>.yaml`
+
+---
+
+# 7. Extension Principles
 
 When adding new subsystems (JWT, RBAC, Versioning, OpenAPI):
 

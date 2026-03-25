@@ -51,4 +51,9 @@ final readonly class FakeEvent implements DomainEventInterface
     {
         return $this->id;
     }
+
+    public function getPayload(): array
+    {
+        return ['id' => $this->id];
+    }
 }

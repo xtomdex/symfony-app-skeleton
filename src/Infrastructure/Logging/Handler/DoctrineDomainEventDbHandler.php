@@ -34,9 +34,9 @@ final class DoctrineDomainEventDbHandler extends AbstractProcessingHandler
             return; // Not a domain event record.
         }
 
-        $payload = $record->context['payload'] ?? [];
+        $payload = $record->context['payload'] ?? null;
         if (!is_array($payload)) {
-            $payload = ['_raw' => $payload];
+            $payload = [];
         }
 
         $eventId = $record->context['event_id'] ?? null;
