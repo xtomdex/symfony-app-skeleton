@@ -35,9 +35,9 @@ final class CreateRootUserHandlerTest extends TestCase
         self::assertInstanceOf(User::class, $user);
         self::assertSame('admin@example.com', $user->getUsername());
         self::assertSame('hashed_pw', $user->getPassword());
-        self::assertSame(UserType::ROOT, $user->getType());
-        self::assertSame(UserStatus::ACTIVE, $user->getStatus());
-        self::assertSame([UserRole::USER->value, UserRole::SUPER_ADMIN->value], $user->getRoles());
+        self::assertSame(UserType::Root, $user->getType());
+        self::assertSame(UserStatus::Active, $user->getStatus());
+        self::assertSame([UserRole::User->value, UserRole::SuperAdmin->value], $user->getRoles());
     }
 
     public function test_throws_when_root_already_exists(): void

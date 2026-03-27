@@ -50,8 +50,8 @@ class BaseUser implements EntityInterface, AggregateRoot
         $self = new static($id);
         $self->username = $username;
         $self->password = $password;
-        $self->type = UserType::CLIENT;
-        $self->status = UserStatus::ACTIVE;
+        $self->type = UserType::Client;
+        $self->status = UserStatus::Active;
 
         $self->recordEvent(new UserCreatedEvent($id, $username));
 
@@ -61,8 +61,8 @@ class BaseUser implements EntityInterface, AggregateRoot
     public static function createRoot(string $id, string $username, string $password): static
     {
         $self = static::create($id, $username, $password);
-        $self->type = UserType::ROOT;
-        $self->roles[] = UserRole::SUPER_ADMIN->value;
+        $self->type = UserType::Root;
+        $self->roles[] = UserRole::SuperAdmin->value;
 
         return $self;
     }
