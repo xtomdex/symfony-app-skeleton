@@ -7,6 +7,7 @@ namespace App\Modules\System\Repository;
 use App\Domain\Pagination\ListCriteria;
 use App\Domain\Pagination\PaginatedResult;
 use App\Domain\Persistence\AbstractRepository;
+use App\Domain\Persistence\Contract\EntityInterface;
 use App\Infrastructure\Pagination\PaginatedQueryTrait;
 use App\Modules\System\Entity\Document;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,13 +15,24 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * @extends AbstractRepository<Document>
  */
-final class DocumentRepository extends AbstractRepository
+class DocumentRepository extends AbstractRepository
 {
     use PaginatedQueryTrait;
 
     public function __construct(EntityManagerInterface $em)
     {
         parent::__construct($em, Document::class);
+    }
+
+    public function remove(EntityInterface $entity): void
+    {
+        if (!$entity instanceof Document) {
+            throw new \InvalidArgumentException(
+                sprintf('Expected %s, got %s.', Document::class, get_class($entity))
+            );
+        }
+        $entity->delete();
+        parent::remove($entity);
     }
 
     public function findPaginated(ListCriteria $criteria): PaginatedResult

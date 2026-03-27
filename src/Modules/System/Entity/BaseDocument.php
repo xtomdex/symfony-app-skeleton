@@ -5,17 +5,24 @@ declare(strict_types=1);
 namespace App\Modules\System\Entity;
 
 use App\Domain\Behavior\Timestampable\TimestampableTrait;
+use App\Domain\Eventing\Contract\AggregateRoot;
+use App\Domain\Eventing\Trait\EventsTrait;
 use App\Domain\Persistence\Contract\EntityInterface;
 use App\Modules\System\Enum\DocumentStatus;
 use App\Modules\System\Enum\DocumentType;
+use App\Modules\System\Event\DocumentArchived;
+use App\Modules\System\Event\DocumentCreated;
+use App\Modules\System\Event\DocumentDeleted;
+use App\Modules\System\Event\DocumentPublished;
+use App\Modules\System\Event\DocumentUpdated;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
-class BaseDocument implements EntityInterface
+class BaseDocument implements EntityInterface, AggregateRoot
 {
-    use TimestampableTrait;
+    use TimestampableTrait, EventsTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'NONE')]
@@ -68,6 +75,8 @@ class BaseDocument implements EntityInterface
         $document->status = DocumentStatus::Draft;
         $document->editedAt = new \DateTimeImmutable();
 
+        $document->recordEvent(new DocumentCreated($document->id, $document->slug, $document->type));
+
         return $document;
     }
 
@@ -77,11 +86,15 @@ class BaseDocument implements EntityInterface
         if ($this->publishedAt === null) {
             $this->publishedAt = new \DateTimeImmutable();
         }
+
+        $this->recordEvent(new DocumentPublished($this->id, $this->slug));
     }
 
     public function archive(): void
     {
         $this->status = DocumentStatus::Archived;
+
+        $this->recordEvent(new DocumentArchived($this->id, $this->slug));
     }
 
     public function updateContent(
@@ -93,6 +106,13 @@ class BaseDocument implements EntityInterface
         $this->content = $content;
         $this->description = $description;
         $this->editedAt = new \DateTimeImmutable();
+
+        $this->recordEvent(new DocumentUpdated($this->id));
+    }
+
+    public function delete(): void
+    {
+        $this->recordEvent(new DocumentDeleted($this->id, $this->slug, $this->type));
     }
 
     public function getId(): string
